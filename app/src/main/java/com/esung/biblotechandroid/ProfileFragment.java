@@ -41,7 +41,7 @@ public class ProfileFragment extends Fragment {
     private TextView mRentableBooksView;
 
     private NodeJsService nodeJsService;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPref;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
 
 //        mUserInfo = getArguments().getParcelable("userInfo");
         nodeJsService = NodeJsApi.getInstance().getService();
-        sharedPreferences = container.getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        sharedPref = getContext().getSharedPreferences(SharedPrefUtil.USER_INFO, Context.MODE_PRIVATE);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
         if (mUserInfo != null) {
             fillInUserInfo(mUserInfo);
         } else {
-            Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(sharedPreferences.getString("userEmail", null));
+            Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(sharedPref.getString(SharedPrefUtil.USER_EMAIL, null));
             fetchCall.enqueue(new Callback<UserInfo>() {
                 @Override
                 public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment {
     private void fillInUserInfo(UserInfo userInfo) {
         mRentScoreView.setText(String.valueOf(userInfo.getRentscore()));
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
-        String gravatarHash = MD5Util.md5Hex(sharedPreferences.getString(SharedPrefUtil.USER_EMAIL, null));
+        String gravatarHash = MD5Util.md5Hex(sharedPref.getString(SharedPrefUtil.USER_EMAIL, null));
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
         Picasso.with(getContext())
                 .load(gravatarUrl)
