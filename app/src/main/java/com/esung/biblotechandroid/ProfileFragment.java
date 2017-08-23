@@ -108,9 +108,9 @@ public class ProfileFragment extends Fragment {
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
         String gravatarHash = MD5Util.md5Hex(sharedPref.getString(SharedPrefUtil.USER_EMAIL, null));
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
-//        Picasso.with(getActivity())
-//                .load(gravatarUrl)
-//                .into(mGravatarView);
+        Picasso.with(getActivity())
+                .load(gravatarUrl)
+                .into(mGravatarView);
     }
 
     @Override
