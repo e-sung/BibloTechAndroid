@@ -23,6 +23,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_EMAIL;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -68,7 +72,7 @@ public class ProfileFragment extends Fragment {
 
 //        mUserInfo = getArguments().getParcelable("userInfo");
         nodeJsService = NodeJsApi.getInstance().getService();
-        sharedPref = getContext().getSharedPreferences(SharedPrefUtil.USER_INFO, Context.MODE_PRIVATE);
+        sharedPref = getContext().getSharedPreferences(USER_INFO, MODE_PRIVATE);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -77,8 +81,6 @@ public class ProfileFragment extends Fragment {
         mRentableBooksView = (TextView) view.findViewById(R.id.tv_rentableBooks);
 
         setUpUi();
-
-
         return view;
     }
 
@@ -86,7 +88,11 @@ public class ProfileFragment extends Fragment {
         if (mUserInfo != null) {
             fillInUserInfo(mUserInfo);
         } else {
-            Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(sharedPref.getString(SharedPrefUtil.USER_EMAIL, null));
+            String userEmail = sharedPref.getString(USER_EMAIL,null);
+            if(userEmail == null){
+                SharedPrefUtil.handleError(getContext());
+            }
+            Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(userEmail);
             fetchCall.enqueue(new Callback<UserInfo>() {
                 @Override
                 public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
@@ -96,7 +102,8 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onFailure(Call<UserInfo> call, Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                    String errorMessage = getString(R.string.server_side_error);
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -106,11 +113,11 @@ public class ProfileFragment extends Fragment {
     private void fillInUserInfo(UserInfo userInfo) {
         mRentScoreView.setText(String.valueOf(userInfo.getRentscore()));
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
-        String gravatarHash = MD5Util.md5Hex(sharedPref.getString(SharedPrefUtil.USER_EMAIL, null));
+        String gravatarHash = MD5Util.md5Hex(sharedPref.getString(USER_EMAIL, null));
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
-        Picasso.with(getActivity())
-                .load(gravatarUrl)
-                .into(mGravatarView);
+//        Picasso.with(getActivity())//TODO getActivity Returns Null <- Fix it!
+//                .load(gravatarUrl)
+//                .into(mGravatarView);
     }
 
     @Override

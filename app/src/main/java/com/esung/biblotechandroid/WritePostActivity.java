@@ -19,6 +19,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_NAME;
+
 public class WritePostActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPref;
@@ -54,7 +58,7 @@ public class WritePostActivity extends AppCompatActivity {
             Phase = INSERT_PHASE;
         }
 
-        sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        sharedPref = getSharedPreferences(USER_INFO, MODE_PRIVATE);
 
         mNodeJsService = NodeJsApi.getInstance().getService();
 
@@ -64,15 +68,20 @@ public class WritePostActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (mTitleView.getText().toString().isEmpty() == false) {
 
-                    mUserName = sharedPref.getString(SharedPrefUtil.USER_NAME, null);
+                    mUserName = sharedPref.getString(USER_NAME, null);
                     mPostTitle = mTitleView.getText().toString();
                     mPostContent = mContentView.getText().toString();
                     mBookTitle = getIntent().getStringExtra("bookTitle");
 
                     Call<ResponseBody> call;
                     if (Phase == UPDATE_PHASE) {
-                        call = mNodeJsService.editPost(sharedPref.getString(SharedPrefUtil.AUTHO_TOKEN, null),
-                                mPostTitle, mPostContent, mPostId);
+                        String authToken = sharedPref.getString(AUTHO_TOKEN, null);
+                        if (authToken == null) {
+                            SharedPrefUtil.handleError(getApplicationContext());
+                        }
+                        call = mNodeJsService.editPost(
+                                authToken, mPostTitle, mPostContent, mPostId
+                        );
                     } else {
                         call = mNodeJsService.
                                 submitPost(mBookTitle, mPostTitle, mPostContent, mUserName);
@@ -86,7 +95,7 @@ public class WritePostActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             t.printStackTrace();
-                            Toast.makeText(WritePostActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WritePostActivity.this, getString(R.string.server_side_error), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
