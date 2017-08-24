@@ -114,11 +114,11 @@ public class ProfileFragment extends Fragment {
         mRentScoreView.setText(String.valueOf(userInfo.getRentscore()));
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
         String gravatarHash = MD5Util.md5Hex(sharedPref.getString(USER_EMAIL, null));
-        Context context = getContext();
+//        Context context = getContext();
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
-        Picasso.with(context)
-                .load(gravatarUrl)
-                .into(mGravatarView);
+//        Picasso.with(context)
+//                .load(gravatarUrl)
+//                .into(mGravatarView);
     }
 
     @Override

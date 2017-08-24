@@ -19,6 +19,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_DETAIL_ACTIVITY;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_LIST_ACTIVITY;
+import static com.esung.biblotechandroid.Utility.IntentTag.PREVIOUS_ACTIVITY;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_NAME;
@@ -89,6 +92,22 @@ public class WritePostActivity extends AppCompatActivity {
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Intent intent = null;
+                            Class targetClass = null;
+
+                            int lastActivity = getIntent().getIntExtra(PREVIOUS_ACTIVITY,POST_LIST_ACTIVITY);
+                            switch (lastActivity){
+                                case POST_LIST_ACTIVITY:
+                                    targetClass = PostListActivity.class;
+                                    break;
+                                case POST_DETAIL_ACTIVITY:
+                                    targetClass = PostDetailActivity.class;
+                                    break;
+                            }
+                            intent = new Intent(getApplicationContext(),targetClass);
+                            intent.putExtra("postId",mPostId);
+                            intent.putExtra("bookTitle",mBookTitle);
+                            startActivity(intent);
                             finish();
                         }
 
