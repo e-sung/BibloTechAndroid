@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
 import com.esung.biblotechandroid.Utility.SessionManager;
 
+import static com.esung.biblotechandroid.Utility.IntentTag.USER_INFO;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.PAGE_TAG;
 
 /**
@@ -66,7 +67,7 @@ public class PageListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        UserInfo userInfo = getIntent().getParcelableExtra("userInfo");
+        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
         if (mProfilefragment != null) {
             removeProfileFragment();
         }
@@ -161,7 +162,7 @@ public class PageListActivity extends AppCompatActivity {
                     break;
             }
         }
-        UserInfo userInfo = getIntent().getParcelableExtra("userInfo");
+        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
         setupProfileFragment(userInfo);
         super.onResume();
     }

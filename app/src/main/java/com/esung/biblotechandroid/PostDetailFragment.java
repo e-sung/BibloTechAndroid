@@ -21,7 +21,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.esung.biblotechandroid.Utility.IntentTag.BOOK_TITLE;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_CONTENT;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_ID;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_LIST_ACTIVITY;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_TITLE;
 import static com.esung.biblotechandroid.Utility.IntentTag.PREVIOUS_ACTIVITY;
 
 
@@ -73,10 +77,10 @@ public class PostDetailFragment extends Fragment {
             public void onClick(View view) {
                 //start write activity
                 Intent intent = new Intent(rootView.getContext(), WritePostActivity.class);
-                intent.putExtra("postId", mPostId);
-                intent.putExtra("bookTitle",mBookTitle);
-                intent.putExtra("postTitle", mPostTitle);
-                intent.putExtra("postContent", mContentView.getText().toString());
+                intent.putExtra(POST_ID, mPostId);
+                intent.putExtra(BOOK_TITLE,mBookTitle);
+                intent.putExtra(POST_TITLE, mPostTitle);
+                intent.putExtra(POST_CONTENT, mContentView.getText().toString());
                 intent.putExtra(PREVIOUS_ACTIVITY, POST_LIST_ACTIVITY);
                 startActivity(intent);
             }

@@ -19,8 +19,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.esung.biblotechandroid.Utility.IntentTag.BOOK_TITLE;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_CONTENT;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_DETAIL_ACTIVITY;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_ID;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_LIST_ACTIVITY;
+import static com.esung.biblotechandroid.Utility.IntentTag.POST_TITLE;
 import static com.esung.biblotechandroid.Utility.IntentTag.PREVIOUS_ACTIVITY;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
@@ -52,11 +56,11 @@ public class WritePostActivity extends AppCompatActivity {
 
         mTitleView = (EditText) findViewById(R.id.etv_postTitle);
         mContentView = (EditText) findViewById(R.id.etv_postContent);
-        if (getIntent().getStringExtra("postContent") != null) {
+        if (getIntent().getStringExtra(POST_CONTENT) != null) {
             Phase = UPDATE_PHASE;
-            mContentView.setText(getIntent().getStringExtra("postContent"));
-            mTitleView.setText(getIntent().getStringExtra("postTitle"));
-            mPostId = getIntent().getIntExtra("postId", -1);
+            mContentView.setText(getIntent().getStringExtra(POST_CONTENT));
+            mTitleView.setText(getIntent().getStringExtra(POST_TITLE));
+            mPostId = getIntent().getIntExtra(POST_ID, -1);
         } else {
             Phase = INSERT_PHASE;
         }
@@ -74,7 +78,7 @@ public class WritePostActivity extends AppCompatActivity {
                     mUserName = sharedPref.getString(USER_NAME, null);
                     mPostTitle = mTitleView.getText().toString();
                     mPostContent = mContentView.getText().toString();
-                    mBookTitle = getIntent().getStringExtra("bookTitle");
+                    mBookTitle = getIntent().getStringExtra(BOOK_TITLE);
 
                     Call<ResponseBody> call;
                     if (Phase == UPDATE_PHASE) {
@@ -105,8 +109,8 @@ public class WritePostActivity extends AppCompatActivity {
                                     break;
                             }
                             intent = new Intent(getApplicationContext(),targetClass);
-                            intent.putExtra("postId",mPostId);
-                            intent.putExtra("bookTitle",mBookTitle);
+                            intent.putExtra(POST_ID,mPostId);
+                            intent.putExtra(BOOK_TITLE,mBookTitle);
                             startActivity(intent);
                             finish();
                         }
