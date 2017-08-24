@@ -1,9 +1,11 @@
 package com.esung.biblotechandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,7 @@ public class ProfileFragment extends Fragment {
 
     private UserInfo mUserInfo;
 
+    private Context mContext;
     private ImageView mGravatarView;
     private TextView mRentScoreView;
     private TextView mRentableBooksView;
@@ -54,7 +57,7 @@ public class ProfileFragment extends Fragment {
     public static ProfileFragment newInstance(UserInfo userInfo) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putParcelable("userInfo", userInfo);
+        args.putParcelable(USER_INFO, userInfo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,12 +87,18 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        mContext = context;
+        super.onAttach(context);
+    }
+
     private void setUpUi() {
         if (mUserInfo != null) {
             fillInUserInfo(mUserInfo);
         } else {
-            String userEmail = sharedPref.getString(USER_EMAIL,null);
-            if(userEmail == null){
+            String userEmail = sharedPref.getString(USER_EMAIL, null);
+            if (userEmail == null) {
                 SharedPrefUtil.handleError(getContext());
             }
             Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(userEmail);
@@ -99,6 +108,7 @@ public class ProfileFragment extends Fragment {
                     mUserInfo = response.body();
                     fillInUserInfo(mUserInfo);
                 }
+
                 @Override
                 public void onFailure(Call<UserInfo> call, Throwable t) {
                     t.printStackTrace();
@@ -114,11 +124,10 @@ public class ProfileFragment extends Fragment {
         mRentScoreView.setText(String.valueOf(userInfo.getRentscore()));
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
         String gravatarHash = MD5Util.md5Hex(sharedPref.getString(USER_EMAIL, null));
-//        Context context = getContext();
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
-//        Picasso.with(context)
-//                .load(gravatarUrl)
-//                .into(mGravatarView);
+        Picasso.with(mContext)
+                .load(gravatarUrl)
+                .into(mGravatarView);
     }
 
     @Override
