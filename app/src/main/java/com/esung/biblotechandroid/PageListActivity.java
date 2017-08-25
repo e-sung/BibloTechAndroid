@@ -147,7 +147,6 @@ public class PageListActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
         if (mTwoPane == true) {
             int buttonTag = getIntent().getIntExtra(PAGE_TAG, -1);
             switch (buttonTag) {
