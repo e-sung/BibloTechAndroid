@@ -2,6 +2,7 @@ package com.esung.biblotechandroid;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_EMAIL;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 
 
 /**
@@ -63,23 +68,29 @@ public class RentedBooksFragment extends Fragment {
         }
         mNodeJsService = NodeJsApi.getInstance().getService();
 
-        Call<List<RentedBooks>> fetchRentedBooks = mNodeJsService.fetchRentedBy(
-                getContext().getSharedPreferences(SharedPrefUtil.USER_INFO, Context.MODE_PRIVATE).
-                        getString(SharedPrefUtil.USER_EMAIL, null)
-        );
+        SharedPreferences sharedPref = getContext().getSharedPreferences(USER_INFO,MODE_PRIVATE);
+        String userEmail = sharedPref.getString(USER_EMAIL,null);
+        if(userEmail == null){
+            SharedPrefUtil.handleError(getContext());
+        }
+        Call<List<RentedBooks>> fetchRentedBooks = mNodeJsService.fetchRentedBy(userEmail);
         fetchRentedBooks.enqueue(new Callback<List<RentedBooks>>() {
             @Override
             public void onResponse(Call<List<RentedBooks>> call, Response<List<RentedBooks>> response) {
-                List<RentedBooks> rentedBookses = response.body();
-                mRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.rv_rentedBooksList);
-                mRecyclerView.setAdapter(new RentedBooksListAdapter(rentedBookses));
-                mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                List<RentedBooks> rentedBooks = response.body();
+                if (rentedBooks == null) {
+                    NodeJsApi.handleServerError(getContext());
+                } else {
+                    mRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.rv_rentedBooksList);
+                    mRecyclerView.setAdapter(new RentedBooksListAdapter(rentedBooks));
+                    mRecyclerView.setHasFixedSize(true);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                }
             }
 
             @Override
             public void onFailure(Call<List<RentedBooks>> call, Throwable t) {
-
+                NodeJsApi.handleServerError(getContext());
             }
         });
 

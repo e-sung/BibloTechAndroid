@@ -76,6 +76,7 @@ public class WritePostActivity extends AppCompatActivity {
                 if (mTitleView.getText().toString().isEmpty() == false) {
 
                     mUserName = sharedPref.getString(USER_NAME, null);
+                    if (mUserName == null){SharedPrefUtil.handleError(getApplicationContext());}
                     mPostTitle = mTitleView.getText().toString();
                     mPostContent = mContentView.getText().toString();
                     mBookTitle = getIntent().getStringExtra(BOOK_TITLE);
@@ -96,9 +97,7 @@ public class WritePostActivity extends AppCompatActivity {
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Intent intent = null;
                             Class targetClass = null;
-
                             int lastActivity = getIntent().getIntExtra(PREVIOUS_ACTIVITY,POST_LIST_ACTIVITY);
                             switch (lastActivity){
                                 case POST_LIST_ACTIVITY:
@@ -108,7 +107,7 @@ public class WritePostActivity extends AppCompatActivity {
                                     targetClass = PostDetailActivity.class;
                                     break;
                             }
-                            intent = new Intent(getApplicationContext(),targetClass);
+                            Intent intent = new Intent(getApplicationContext(),targetClass);
                             intent.putExtra(POST_ID,mPostId);
                             intent.putExtra(BOOK_TITLE,mBookTitle);
                             startActivity(intent);
@@ -118,7 +117,7 @@ public class WritePostActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             t.printStackTrace();
-                            Toast.makeText(WritePostActivity.this, getString(R.string.server_side_error), Toast.LENGTH_SHORT).show();
+                            NodeJsApi.handleServerError(getApplicationContext());
                         }
                     });
                 }

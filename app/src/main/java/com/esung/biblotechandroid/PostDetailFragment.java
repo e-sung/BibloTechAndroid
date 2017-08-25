@@ -78,7 +78,7 @@ public class PostDetailFragment extends Fragment {
                 //start write activity
                 Intent intent = new Intent(rootView.getContext(), WritePostActivity.class);
                 intent.putExtra(POST_ID, mPostId);
-                intent.putExtra(BOOK_TITLE,mBookTitle);
+                intent.putExtra(BOOK_TITLE, mBookTitle);
                 intent.putExtra(POST_TITLE, mPostTitle);
                 intent.putExtra(POST_CONTENT, mContentView.getText().toString());
                 intent.putExtra(PREVIOUS_ACTIVITY, POST_LIST_ACTIVITY);
@@ -102,21 +102,24 @@ public class PostDetailFragment extends Fragment {
             @Override
             public void onResponse(Call<PostContent> call, Response<PostContent> response) {
                 String content = response.body().getPostContent();
-                mContentView.setText(content);
-
-                SharedPreferences sp = getContext().
-                        getSharedPreferences(SharedPrefUtil.USER_INFO, Context.MODE_PRIVATE);
-                String userName = sp.getString(SharedPrefUtil.USER_NAME, null);
-                String writerName = response.body().getWriter();
-                if (userName.equals(writerName)) {
-                    mEditButton.setVisibility(View.VISIBLE);
+                if (content == null) {
+                    NodeJsApi.handleServerError(getContext());
+                } else {
+                    mContentView.setText(content);
+                    SharedPreferences sp = getContext().
+                            getSharedPreferences(SharedPrefUtil.USER_INFO, Context.MODE_PRIVATE);
+                    String userName = sp.getString(SharedPrefUtil.USER_NAME, "Invalid UserName");
+                    String writerName = response.body().getWriter();
+                    if (userName.equals(writerName)) {
+                        mEditButton.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<PostContent> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(rootView.getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                NodeJsApi.handleServerError(getContext());
             }
         });
     }

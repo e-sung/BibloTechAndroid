@@ -106,14 +106,17 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                     mUserInfo = response.body();
-                    fillInUserInfo(mUserInfo);
+                    if (mUserInfo == null) {
+                        NodeJsApi.handleServerError(getContext());
+                    } else {
+                        fillInUserInfo(mUserInfo);
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<UserInfo> call, Throwable t) {
                     t.printStackTrace();
-                    String errorMessage = getString(R.string.server_side_error);
-                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    NodeJsApi.handleServerError(getContext());
                 }
             });
         }
@@ -123,7 +126,7 @@ public class ProfileFragment extends Fragment {
     private void fillInUserInfo(UserInfo userInfo) {
         mRentScoreView.setText(String.valueOf(userInfo.getRentscore()));
         mRentableBooksView.setText(String.valueOf(userInfo.getRentableBooks()));
-        String gravatarHash = MD5Util.md5Hex(sharedPref.getString(USER_EMAIL, null));
+        String gravatarHash = MD5Util.md5Hex(sharedPref.getString(USER_EMAIL, "fallback@profile.pic"));
         String gravatarUrl = "http://www.gravatar.com/avatar/" + gravatarHash + "?size=200";
         Picasso.with(mContext)
                 .load(gravatarUrl)
