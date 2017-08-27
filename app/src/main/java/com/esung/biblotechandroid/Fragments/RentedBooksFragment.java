@@ -1,7 +1,6 @@
-package com.esung.biblotechandroid;
+package com.esung.biblotechandroid.Fragments;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.esung.biblotechandroid.Network.GsonConverters.RentedBooks;
 import com.esung.biblotechandroid.Network.NodeJsApi;
 import com.esung.biblotechandroid.Network.NodeJsService;
+import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.RecyclerAdapters.RentedBooksListAdapter;
 import com.esung.biblotechandroid.Utility.SharedPrefUtil;
 
@@ -30,11 +30,6 @@ import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_EMAIL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RentedBooksFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RentedBooksFragment extends Fragment {
 
     private View fragmentView;
@@ -44,11 +39,6 @@ public class RentedBooksFragment extends Fragment {
 
     public RentedBooksFragment() {
         // Required empty public constructor
-    }
-
-    public static RentedBooksFragment newInstance(String param1, String param2) {
-        RentedBooksFragment fragment = new RentedBooksFragment();
-        return fragment;
     }
 
     @Override
@@ -66,7 +56,7 @@ public class RentedBooksFragment extends Fragment {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             mPageTitleView.setVisibility(View.GONE);
         }
-        mNodeJsService = NodeJsApi.getInstance().getService();
+        mNodeJsService = NodeJsApi.getInstance(getContext()).getService();
 
         SharedPreferences sharedPref = getContext().getSharedPreferences(USER_INFO,MODE_PRIVATE);
         String userEmail = sharedPref.getString(USER_EMAIL,null);

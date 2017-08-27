@@ -1,4 +1,4 @@
-package com.esung.biblotechandroid;
+package com.esung.biblotechandroid.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
+import com.esung.biblotechandroid.Fragments.PostIwroteFragment;
+import com.esung.biblotechandroid.Fragments.ProfileFragment;
+import com.esung.biblotechandroid.R;
+import com.esung.biblotechandroid.Fragments.ReadByMeFragment;
+import com.esung.biblotechandroid.Fragments.RentedBooksFragment;
 import com.esung.biblotechandroid.Utility.SessionManager;
 
 import static com.esung.biblotechandroid.Utility.IntentTag.USER_INFO;
@@ -53,11 +58,17 @@ public class PageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_page_list);
 
 
-        mRentedBooksBt = (Button) findViewById(R.id.bt_booksRentedByMe);
-        mBooksIreadBt = (Button) findViewById(R.id.bt_booksIread);
-        mPostIwroteBt = (Button) findViewById(R.id.bt_postIwrote);
-        mSearchBooksBt = (Button) findViewById(R.id.bt_searchBooks);
-        mQRcodeBt = (Button) findViewById(R.id.bt_qrCodeActivity);
+        //If user has just "signed In", we have "UserInfo" Object in Intent.
+        //If we already have that object, why not use it instead of making another Http Request?
+        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
+        //ProfileFragment have to be always refreshed. User wants to see updates on his/her
+        //rentalScore or rentable books immediately
+        if (mProfilefragment != null) {
+            removeProfileFragment();
+        }
+        //If "userInfo" is null, ProfileFragment will make another http request to
+        //get userInfo object in "setUpUi" method
+        setupProfileFragment(userInfo);
 
         if (findViewById(R.id.page_detail_container) != null) {
             // The detail container view will be present only in the
@@ -67,11 +78,15 @@ public class PageListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
-        if (mProfilefragment != null) {
-            removeProfileFragment();
-        }
-        setupProfileFragment(userInfo);
+        //Initialize Button Objects
+        mRentedBooksBt = (Button) findViewById(R.id.bt_booksRentedByMe);
+        mBooksIreadBt = (Button) findViewById(R.id.bt_booksIread);
+        mPostIwroteBt = (Button) findViewById(R.id.bt_postIwrote);
+        mSearchBooksBt = (Button) findViewById(R.id.bt_searchBooks);
+        mQRcodeBt = (Button) findViewById(R.id.bt_qrCodeActivity);
+
+
+        //Add click listeners to Buttons
         mRentedBooksBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +131,7 @@ public class PageListActivity extends AppCompatActivity {
     private void setupProfileFragment(UserInfo userInfo) {
         initializeFragmentManagers();
         mProfilefragment = new ProfileFragment();
-        mProfilefragment.newInstance(userInfo);
+        ProfileFragment.newInstance(userInfo);
         fragmentTransaction.replace(R.id.profileFragmentContainer, mProfilefragment);
         fragmentTransaction.commit();
     }
@@ -147,6 +162,9 @@ public class PageListActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        //If user rotates screen to LandScape in PostDetailActivity,
+        //PostDetailActivity gets terminated and user will return to PageListActivity.
+        //On LeftPane of PageListActivity, show the fragment the user was watching in PostDetailActivity
         if (mTwoPane == true) {
             int buttonTag = getIntent().getIntExtra(PAGE_TAG, -1);
             switch (buttonTag) {

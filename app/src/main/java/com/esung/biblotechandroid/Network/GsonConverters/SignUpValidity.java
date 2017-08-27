@@ -29,39 +29,21 @@ public class SignUpValidity {
         return userNameValidity;
     }
 
-    public void setUserNameValidity(String userNameValidity) {
-        this.userNameValidity = userNameValidity;
-    }
-
     public String getPhoneNumberValidity() {
         return phoneNumberValidity;
     }
 
-    public void setPhoneNumberValidity(String phoneNumberValidity) {
-        this.phoneNumberValidity = phoneNumberValidity;
-    }
 
     public String getEmailValidity() {
         return emailValidity;
-    }
-
-    public void setEmailValidity(String emailValidity) {
-        this.emailValidity = emailValidity;
     }
 
     public String getPasswordValidity() {
         return passwordValidity;
     }
 
-    public void setPasswordValidity(String passwordValidity) {
-        this.passwordValidity = passwordValidity;
-    }
-
     public String getPasswordConfirmValidity() {
         return passwordConfirmValidity;
     }
 
-    public void setPasswordConfirmValidity(String passwordConfirmValidity) {
-        this.passwordConfirmValidity = passwordConfirmValidity;
-    }
 }

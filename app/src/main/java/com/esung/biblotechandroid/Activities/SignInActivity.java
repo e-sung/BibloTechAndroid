@@ -1,26 +1,21 @@
-package com.esung.biblotechandroid;
+package com.esung.biblotechandroid.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -32,13 +27,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
 import com.esung.biblotechandroid.Network.NodeJsApi;
 import com.esung.biblotechandroid.Network.NodeJsService;
+import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.Utility.IntentTag;
-import com.esung.biblotechandroid.Utility.SharedPrefUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,10 +65,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     private View mProgressView;
     private View mLoginFormView;
 
-    //Completed 1. SignUpActivity : Prepare for Registration Failure Case
-    //Completed 2. Make HardCoded Values to Variables
-    //TODO 3. Make Api more restful
-    //TODO 5. Give Annotations when needed
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -227,7 +218,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private void actualLogin(String email, String password) {
-        NodeJsService nodeJsService = NodeJsApi.getInstance().getService();
+        NodeJsService nodeJsService = NodeJsApi.getInstance(getApplicationContext()).getService();
         Call<UserInfo> submitSignInCall = nodeJsService.submitSignIn(email, password);
         submitSignInCall.enqueue(new Callback<UserInfo>() {
             @Override

@@ -1,22 +1,20 @@
-package com.esung.biblotechandroid;
+package com.esung.biblotechandroid.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
 import com.esung.biblotechandroid.Network.NodeJsApi;
 import com.esung.biblotechandroid.Network.NodeJsService;
+import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.Utility.MD5Util;
 import com.esung.biblotechandroid.Utility.SharedPrefUtil;
 import com.squareup.picasso.Picasso;
@@ -32,21 +30,14 @@ import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 
 public class ProfileFragment extends Fragment {
 
-    public UserInfo getUserInfo() {
-        return mUserInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.mUserInfo = userInfo;
-    }
-
-    private UserInfo mUserInfo;
-
     private Context mContext;
     private ImageView mGravatarView;
     private TextView mRentScoreView;
     private TextView mRentableBooksView;
 
+
+
+    private UserInfo mUserInfo;
     private NodeJsService nodeJsService;
     private SharedPreferences sharedPref;
 
@@ -56,9 +47,10 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment newInstance(UserInfo userInfo) {
         ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(USER_INFO, userInfo);
-        fragment.setArguments(args);
+        fragment.setUserInfo(userInfo);
+//        Bundle args = new Bundle();
+//        args.putParcelable(USER_INFO, userInfo);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -73,8 +65,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //TODO use arguments...
 //        mUserInfo = getArguments().getParcelable("userInfo");
-        nodeJsService = NodeJsApi.getInstance().getService();
+        nodeJsService = NodeJsApi.getInstance(getContext()).getService();
         sharedPref = getContext().getSharedPreferences(USER_INFO, MODE_PRIVATE);
 
         // Inflate the layout for this fragment
@@ -101,6 +94,7 @@ public class ProfileFragment extends Fragment {
             if (userEmail == null) {
                 SharedPrefUtil.handleError(getContext());
             }
+
             Call<UserInfo> fetchCall = nodeJsService.fetchUserInfo(userEmail);
             fetchCall.enqueue(new Callback<UserInfo>() {
                 @Override
@@ -160,5 +154,13 @@ public class ProfileFragment extends Fragment {
         };
         new Thread(updateUI).start();
         mRentableBooksView.setText(String.valueOf(newRentableBooks));
+    }
+
+    public UserInfo getUserInfo() {
+        return mUserInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.mUserInfo = userInfo;
     }
 }

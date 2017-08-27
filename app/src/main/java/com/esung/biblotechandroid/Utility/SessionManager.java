@@ -3,18 +3,8 @@ package com.esung.biblotechandroid.Utility;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.esung.biblotechandroid.SignInActivity;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.esung.biblotechandroid.Activities.SignInActivity;
 
 /**
  * Created by sungdoo on 2017-08-16.
