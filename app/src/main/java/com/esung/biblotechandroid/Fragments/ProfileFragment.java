@@ -48,9 +48,6 @@ public class ProfileFragment extends Fragment {
     public static ProfileFragment newInstance(UserInfo userInfo) {
         ProfileFragment fragment = new ProfileFragment();
         fragment.setUserInfo(userInfo);
-//        Bundle args = new Bundle();
-//        args.putParcelable(USER_INFO, userInfo);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -65,8 +62,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //TODO use arguments...
-//        mUserInfo = getArguments().getParcelable("userInfo");
         nodeJsService = NodeJsApi.getInstance(getContext()).getService();
         sharedPref = getContext().getSharedPreferences(USER_INFO, MODE_PRIVATE);
 

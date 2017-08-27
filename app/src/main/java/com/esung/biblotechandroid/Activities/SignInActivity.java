@@ -42,6 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static com.esung.biblotechandroid.Utility.IntentTag.SIGNED_UP_EMAIL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_EMAIL;
@@ -74,7 +75,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         SharedPreferences sharedPreferences = getSharedPreferences(USER_INFO,MODE_PRIVATE);
         if (sharedPreferences.getString(USER_EMAIL,null) != null) {
             Intent intent = new Intent(this, PageListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }
@@ -236,9 +237,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
                     prefEditor.commit();
 
                     Intent intent = new Intent(getApplicationContext(), PageListActivity.class);
-                    intent.putExtra(IntentTag.USER_INFO, userInfo);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+                    intent.putExtra(IntentTag.USER_INFO,userInfo);
                     startActivity(intent);
                     showProgress(false);
                     finish();

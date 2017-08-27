@@ -48,6 +48,7 @@ public class PageListActivity extends AppCompatActivity {
     private static final int READ_BY_ME_FRAGMENT_TAG = 2;
     private static final int POST_I_WROTE_FRAGMENT_TAG = 3;
 
+    private UserInfo mUserInfo;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ProfileFragment mProfilefragment;
@@ -57,18 +58,16 @@ public class PageListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_list);
 
-
         //If user has just "signed In", we have "UserInfo" Object in Intent.
         //If we already have that object, why not use it instead of making another Http Request?
-        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
+
+        Intent intent = getIntent();
+        mUserInfo = getIntent().getParcelableExtra(USER_INFO);
         //ProfileFragment have to be always refreshed. User wants to see updates on his/her
         //rentalScore or rentable books immediately
         if (mProfilefragment != null) {
             removeProfileFragment();
         }
-        //If "userInfo" is null, ProfileFragment will make another http request to
-        //get userInfo object in "setUpUi" method
-        setupProfileFragment(userInfo);
 
         if (findViewById(R.id.page_detail_container) != null) {
             // The detail container view will be present only in the
@@ -130,8 +129,7 @@ public class PageListActivity extends AppCompatActivity {
 
     private void setupProfileFragment(UserInfo userInfo) {
         initializeFragmentManagers();
-        mProfilefragment = new ProfileFragment();
-        ProfileFragment.newInstance(userInfo);
+        mProfilefragment = new ProfileFragment().newInstance(userInfo);
         fragmentTransaction.replace(R.id.profileFragmentContainer, mProfilefragment);
         fragmentTransaction.commit();
     }
@@ -162,6 +160,10 @@ public class PageListActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        //If "userInfo" is null, ProfileFragment will make another http request to
+        //get userInfo object in "setUpUi" method
+        setupProfileFragment(mUserInfo);
+
         //If user rotates screen to LandScape in PostDetailActivity,
         //PostDetailActivity gets terminated and user will return to PageListActivity.
         //On LeftPane of PageListActivity, show the fragment the user was watching in PostDetailActivity
@@ -179,8 +181,6 @@ public class PageListActivity extends AppCompatActivity {
                     break;
             }
         }
-        UserInfo userInfo = getIntent().getParcelableExtra(USER_INFO);
-        setupProfileFragment(userInfo);
         super.onResume();
     }
 
