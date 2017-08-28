@@ -80,7 +80,6 @@ public class RentedBooksFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<RentedBooks>> call, Throwable t) {
-                NodeJsApi.handleServerError(getContext());
             }
         });
 

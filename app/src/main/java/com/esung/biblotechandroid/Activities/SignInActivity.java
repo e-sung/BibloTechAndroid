@@ -19,6 +19,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -27,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
 import com.esung.biblotechandroid.Network.NodeJsApi;
@@ -45,6 +48,9 @@ import static android.Manifest.permission.READ_CONTACTS;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static com.esung.biblotechandroid.Utility.IntentTag.SIGNED_UP_EMAIL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.BASE_URL;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NETWORK;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NOT_SET;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_EMAIL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_NAME;
@@ -72,8 +78,8 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
         super.onCreate(savedInstanceState);
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences(USER_INFO,MODE_PRIVATE);
-        if (sharedPreferences.getString(USER_EMAIL,null) != null) {
+        SharedPreferences sharedPreferences = getSharedPreferences(USER_INFO, MODE_PRIVATE);
+        if (sharedPreferences.getString(USER_EMAIL, null) != null) {
             Intent intent = new Intent(this, PageListActivity.class);
             intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -219,6 +225,10 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private void actualLogin(String email, String password) {
+        SharedPreferences sharedPref = getSharedPreferences(NETWORK, MODE_PRIVATE);
+        String baseUrl = sharedPref.getString(BASE_URL, NOT_SET);
+        Toast.makeText(this, baseUrl, Toast.LENGTH_SHORT).show();
+
         NodeJsService nodeJsService = NodeJsApi.getInstance(getApplicationContext()).getService();
         Call<UserInfo> submitSignInCall = nodeJsService.submitSignIn(email, password);
         submitSignInCall.enqueue(new Callback<UserInfo>() {
@@ -237,7 +247,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
                     prefEditor.commit();
 
                     Intent intent = new Intent(getApplicationContext(), PageListActivity.class);
-                    intent.putExtra(IntentTag.USER_INFO,userInfo);
+                    intent.putExtra(IntentTag.USER_INFO, userInfo);
                     startActivity(intent);
                     showProgress(false);
                     finish();
@@ -322,6 +332,22 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sign_in, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_settings) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            intent.putExtra(IntentTag.PREVIOUS_ACTIVITY, true);
+            startActivity(intent);
+        }
+        return true;
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {

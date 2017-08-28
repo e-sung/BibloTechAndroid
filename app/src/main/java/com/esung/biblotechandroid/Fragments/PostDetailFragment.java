@@ -118,7 +118,6 @@ public class PostDetailFragment extends Fragment {
             @Override
             public void onFailure(Call<PostContent> call, Throwable t) {
                 t.printStackTrace();
-                NodeJsApi.handleServerError(getContext());
             }
         });
     }

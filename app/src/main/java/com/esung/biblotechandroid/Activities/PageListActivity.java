@@ -17,6 +17,7 @@ import com.esung.biblotechandroid.Fragments.ProfileFragment;
 import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.Fragments.ReadByMeFragment;
 import com.esung.biblotechandroid.Fragments.RentedBooksFragment;
+import com.esung.biblotechandroid.Utility.IntentTag;
 import com.esung.biblotechandroid.Utility.SessionManager;
 
 import static com.esung.biblotechandroid.Utility.IntentTag.USER_INFO;
@@ -194,6 +195,12 @@ public class PageListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_item_logout) {
             new SessionManager(this).logout(getApplicationContext());
+        } else if (item.getItemId() == R.id.menu_item_settings) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            intent.putExtra(IntentTag.PREVIOUS_ACTIVITY, true);
+            startActivity(intent);
+            finish();
+
         }
         return true;
     }
