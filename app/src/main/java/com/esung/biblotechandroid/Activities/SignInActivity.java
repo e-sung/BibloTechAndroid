@@ -47,7 +47,7 @@ import retrofit2.Response;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static com.esung.biblotechandroid.Utility.IntentTag.SIGNED_UP_EMAIL;
-import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTH_TOKEN;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.BASE_URL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NETWORK;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NOT_SET;
@@ -243,7 +243,7 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
                     prefEditor.clear();
                     prefEditor.putString(USER_EMAIL, userInfo.getEmail());
                     prefEditor.putString(USER_NAME, userInfo.getUsername());
-                    prefEditor.putString(AUTHO_TOKEN, userInfo.getAuthToken());
+                    prefEditor.putString(AUTH_TOKEN, userInfo.getAuthToken());
                     prefEditor.commit();
 
                     Intent intent = new Intent(getApplicationContext(), PageListActivity.class);
@@ -346,6 +346,9 @@ public class SignInActivity extends AppCompatActivity implements LoaderCallbacks
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             intent.putExtra(IntentTag.PREVIOUS_ACTIVITY, true);
             startActivity(intent);
+            if (getSharedPreferences(USER_INFO, MODE_PRIVATE).getString(USER_EMAIL, null) != null) {
+                finish();
+            }
         }
         return true;
     }

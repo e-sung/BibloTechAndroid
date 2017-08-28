@@ -2,40 +2,22 @@ package com.esung.biblotechandroid.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.esung.biblotechandroid.Network.NodeJsApi;
-import com.esung.biblotechandroid.Network.NodeJsService;
 import com.esung.biblotechandroid.R;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.esung.biblotechandroid.Utility.IntentTag.PREVIOUS_ACTIVITY;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.BASE_URL;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NETWORK;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.NOT_SET;
 
 public class SettingsActivity extends AppCompatActivity {
 
-
-    private EditText mProtocol;
-    private EditText mIp0;
-    private EditText mIp1;
-    private EditText mIp2;
-    private EditText mIp3;
-    private EditText mPort;
-    private Button mButton;
-
-    private SharedPreferences mSharedPref;
-    private SharedPreferences.Editor mEditor;
 
     String protocol;
     String FullIpAddress;
@@ -45,6 +27,15 @@ public class SettingsActivity extends AppCompatActivity {
     String ip1;
     String ip2;
     String ip3;
+    private EditText mProtocol;
+    private EditText mIp0;
+    private EditText mIp1;
+    private EditText mIp2;
+    private EditText mIp3;
+    private EditText mPort;
+    private Button mButton;
+    private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,23 +63,6 @@ public class SettingsActivity extends AppCompatActivity {
             String baseUrl = mSharedPref.getString(BASE_URL, null);
             parseBaseUrl(baseUrl);
             setUpUrl();
-
-            if (getIntent().getBooleanExtra(PREVIOUS_ACTIVITY, false) == false) {
-                NodeJsService nodeJsService = NodeJsApi.getInstance(getApplicationContext()).getService();
-                Call<ResponseBody> testCall = nodeJsService.testConnection();
-                testCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        startActivity(new Intent(getApplicationContext(), SignInActivity.class));
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(SettingsActivity.this, getString(R.string.set_server_address), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
         }
 
 
@@ -114,6 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mEditor.commit();
                 NodeJsApi.refreshInstance(getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                finish();
             }
         });
     }

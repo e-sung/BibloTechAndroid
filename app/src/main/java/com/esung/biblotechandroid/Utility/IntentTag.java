@@ -15,4 +15,8 @@ public class IntentTag {
     public static final String POST_TITLE = "postTitle";
     public static final String POST_CONTENT = "postContent";
     public static final String PREVIOUS_ACTIVITY = "previousActivity";
+    public static final String RENTAL_ACTION = "rentalAction";
+    public static final String RENT = "rent";
+    public static final String RETURN = "return";
+    public static final String BOOK_ID = "bookId";
 }

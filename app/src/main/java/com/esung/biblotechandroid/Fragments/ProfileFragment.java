@@ -3,7 +3,6 @@ package com.esung.biblotechandroid.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,6 @@ public class ProfileFragment extends Fragment {
     private ImageView mGravatarView;
     private TextView mRentScoreView;
     private TextView mRentableBooksView;
-
 
 
     private UserInfo mUserInfo;
@@ -128,28 +126,29 @@ public class ProfileFragment extends Fragment {
         super.onResume();
     }
 
-    public void updateFigures(final int newRentScore, int newRentableBooks) {
-        Runnable updateUI = new Runnable() {
-            @Override
-            public void run() {
-                SystemClock.sleep(600);
-                while (Integer.parseInt(mRentScoreView.getText().toString()) < newRentScore - 1) {
-                    SystemClock.sleep(50);
-                    int oldRentscore = Integer.parseInt(mRentScoreView.getText().toString());
-                    oldRentscore += 1;
-                    final int finalOldRentscore = oldRentscore;
-                    mRentScoreView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRentScoreView.setText(String.valueOf(finalOldRentscore));
-                        }
-                    });
-                }
-            }
-        };
-        new Thread(updateUI).start();
-        mRentableBooksView.setText(String.valueOf(newRentableBooks));
-    }
+    //TODO Run animation after RentalActivity
+//    public void updateFigures(final int newRentScore, int newRentableBooks) {
+//        Runnable updateUI = new Runnable() {
+//            @Override
+//            public void run() {
+//                SystemClock.sleep(600);
+//                while (Integer.parseInt(mRentScoreView.getText().toString()) < newRentScore - 1) {
+//                    SystemClock.sleep(50);
+//                    int oldRentscore = Integer.parseInt(mRentScoreView.getText().toString());
+//                    oldRentscore += 1;
+//                    final int finalOldRentscore = oldRentscore;
+//                    mRentScoreView.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mRentScoreView.setText(String.valueOf(finalOldRentscore));
+//                        }
+//                    });
+//                }
+//            }
+//        };
+//        new Thread(updateUI).start();
+//        mRentableBooksView.setText(String.valueOf(newRentableBooks));
+//    }
 
     public UserInfo getUserInfo() {
         return mUserInfo;

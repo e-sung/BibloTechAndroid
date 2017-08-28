@@ -23,27 +23,23 @@ import static com.esung.biblotechandroid.Utility.IntentTag.BOOK_TITLE;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_CONTENT;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_ID;
 import static com.esung.biblotechandroid.Utility.IntentTag.POST_TITLE;
-import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTHO_TOKEN;
+import static com.esung.biblotechandroid.Utility.SharedPrefUtil.AUTH_TOKEN;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_INFO;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.USER_NAME;
 
 public class WritePostActivity extends AppCompatActivity {
 
+    private static final int UPDATE_PHASE = 0;
+    private static final int INSERT_PHASE = 1;
     private SharedPreferences sharedPref;
-
     private EditText mTitleView;
     private EditText mContentView;
-
     private String mUserName;
     private String mPostTitle;
     private String mPostContent;
     private String mBookTitle;
     private int mPostId;
-
     private int Phase;
-    private static final int UPDATE_PHASE = 0;
-    private static final int INSERT_PHASE = 1;
-
     private NodeJsService mNodeJsService;
 
     @Override
@@ -81,7 +77,7 @@ public class WritePostActivity extends AppCompatActivity {
 
                     Call<ResponseBody> call;
                     if (Phase == UPDATE_PHASE) {
-                        String authToken = sharedPref.getString(AUTHO_TOKEN, null);
+                        String authToken = sharedPref.getString(AUTH_TOKEN, null);
                         if (authToken == null) {
                             SharedPrefUtil.handleError(getApplicationContext());
                         }

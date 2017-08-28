@@ -1,6 +1,7 @@
 package com.esung.biblotechandroid.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,14 +12,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
 import com.esung.biblotechandroid.Fragments.PostIwroteFragment;
 import com.esung.biblotechandroid.Fragments.ProfileFragment;
-import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.Fragments.ReadByMeFragment;
 import com.esung.biblotechandroid.Fragments.RentedBooksFragment;
+import com.esung.biblotechandroid.Network.GsonConverters.UserInfo;
+import com.esung.biblotechandroid.Network.NodeJsApi;
+import com.esung.biblotechandroid.Network.NodeJsService;
+import com.esung.biblotechandroid.R;
 import com.esung.biblotechandroid.Utility.IntentTag;
 import com.esung.biblotechandroid.Utility.SessionManager;
+import com.esung.biblotechandroid.Utility.SharedPrefUtil;
 
 import static com.esung.biblotechandroid.Utility.IntentTag.USER_INFO;
 import static com.esung.biblotechandroid.Utility.SharedPrefUtil.PAGE_TAG;
@@ -33,26 +37,27 @@ import static com.esung.biblotechandroid.Utility.SharedPrefUtil.PAGE_TAG;
  */
 public class PageListActivity extends AppCompatActivity {
 
+    private static final int RENTED_BOOKS_FRAGMENT_TAG = 1;
+    private static final int READ_BY_ME_FRAGMENT_TAG = 2;
+    private static final int POST_I_WROTE_FRAGMENT_TAG = 3;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
-
     private Button mRentedBooksBt;
     private Button mBooksIreadBt;
     private Button mPostIwroteBt;
     private Button mSearchBooksBt;
     private Button mQRcodeBt;
-
-    private static final int RENTED_BOOKS_FRAGMENT_TAG = 1;
-    private static final int READ_BY_ME_FRAGMENT_TAG = 2;
-    private static final int POST_I_WROTE_FRAGMENT_TAG = 3;
-
     private UserInfo mUserInfo;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ProfileFragment mProfilefragment;
+
+    private NodeJsService mNodeJsService;
+    private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,6 @@ public class PageListActivity extends AppCompatActivity {
         //If user has just "signed In", we have "UserInfo" Object in Intent.
         //If we already have that object, why not use it instead of making another Http Request?
 
-        Intent intent = getIntent();
         mUserInfo = getIntent().getParcelableExtra(USER_INFO);
         //ProfileFragment have to be always refreshed. User wants to see updates on his/her
         //rentalScore or rentable books immediately
@@ -126,6 +130,17 @@ public class PageListActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SearchActivity.class));
             }
         });
+
+        mQRcodeBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), QRScanActivity.class));
+            }
+        });
+
+        mNodeJsService = NodeJsApi.getInstance(getApplicationContext()).getService();
+        mSharedPref = getSharedPreferences(SharedPrefUtil.USER_INFO, MODE_PRIVATE);
+        mEditor = mSharedPref.edit();
     }
 
     private void setupProfileFragment(UserInfo userInfo) {
@@ -182,6 +197,8 @@ public class PageListActivity extends AppCompatActivity {
                     break;
             }
         }
+
+
         super.onResume();
     }
 
