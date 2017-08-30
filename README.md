@@ -1,6 +1,6 @@
 # What is it?
 * Android Client Part of BibloTechPi Project
-* [Server Part] (https://github.com/e-sung/BibloTechPi-Server)
+* [Server Part](https://github.com/e-sung/BibloTechPi-Server)
 * Other Client Parts : Coming Soon
 
 # What is BibloTechPi Project?
