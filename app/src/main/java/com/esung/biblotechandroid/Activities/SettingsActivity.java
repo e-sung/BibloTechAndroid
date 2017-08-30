@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
         String baseURL = mSharedPref.getString(BASE_URL, NOT_SET);
         if (baseURL == NOT_SET) {
             Toast.makeText(this, getString(R.string.set_server_address), Toast.LENGTH_LONG).show();
-            baseURL = "http://192.168.0.12:3000/";
+            baseURL = "http://192.168.0.12:3030/";
             parseBaseUrl(baseURL);
             setUpUrl();
         } else {
