@@ -5,6 +5,6 @@
 
 # What is BibloTechPi Project?
 * Rent and return book with QR code
-*Search Books with its title / author / publisher
+* Search Books with its title / author / publisher
 * Write and read book review
 * Introductory Video : https://youtu.be/kazQGE6X-ss
