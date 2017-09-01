@@ -7,4 +7,4 @@
 * Rent and return book with QR code
 * Search Books with its title / author / publisher
 * Write and read book review
-* Introductory Video : https://youtu.be/kazQGE6X-ss
+* ![Demo Gif](https://github.com/e-sung/BibloTechPi-Server/raw/master/demo.gif)
