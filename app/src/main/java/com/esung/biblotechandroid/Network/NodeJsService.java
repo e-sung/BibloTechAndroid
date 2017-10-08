@@ -52,7 +52,8 @@ public interface NodeJsService {
 
     @FormUrlEncoded
     @POST("entry/of-book-review/")
-    Call<ResponseBody> postNewEntry(@Field("bookTitle") String bookTitle,
+    Call<ResponseBody> postNewEntry(@Header("Authorization") String authorizationToken,
+                                    @Field("bookTitle") String bookTitle,
                                     @Field("postTitle") String postTitle,
                                     @Field("postContent") String postContent,
                                     @Field("userName") String userName);
@@ -70,9 +71,9 @@ public interface NodeJsService {
     @FormUrlEncoded
     @PATCH("rental/status-of/book/{id}/to/{situation}")
     Call<ResponseBody> sendRentOperationRequest(@Header("Authorization") String authorization,
-                                       @Path("id") int bookId,
-                                       @Path("situation") String targetStatus,
-                                       @Field("userEmail") String userEmail);
+                                                @Path("id") int bookId,
+                                                @Path("situation") String targetStatus,
+                                                @Field("userEmail") String userEmail);
 
     @FormUrlEncoded
     @POST("user/sign-in")
@@ -81,8 +82,8 @@ public interface NodeJsService {
     @FormUrlEncoded
     @POST("user/sign-up")
     Call<SignUpValidity> signUpWith(@Field("userName") String userName, @Field("phoneNumber") String phoneNumber,
-                                      @Field("email") String email, @Field("password") String password,
-                                      @Field("passwordConfirm") String passwordConfirm
+                                    @Field("email") String email, @Field("password") String password,
+                                    @Field("passwordConfirm") String passwordConfirm
     );
 
     @GET("user/info-with/{email}")

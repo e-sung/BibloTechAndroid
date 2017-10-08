@@ -75,15 +75,14 @@ public class WritePostActivity extends AppCompatActivity {
                     mPostContent = mContentView.getText().toString();
                     mBookTitle = getIntent().getStringExtra(BOOK_TITLE);
 
+                    String authToken = sharedPref.getString(AUTH_TOKEN, null);
+                    if (authToken == null) SharedPrefUtil.handleError(getApplicationContext());
+
                     Call<ResponseBody> call;
                     if (Phase == UPDATE_PHASE) {
-                        String authToken = sharedPref.getString(AUTH_TOKEN, null);
-                        if (authToken == null) {
-                            SharedPrefUtil.handleError(getApplicationContext());
-                        }
                         call = mNodeJsService.editEntry(authToken,mPostTitle,mPostContent,mPostId);
                     } else {
-                        call = mNodeJsService.postNewEntry(mBookTitle, mPostTitle, mPostContent, mUserName);
+                        call = mNodeJsService.postNewEntry(authToken, mBookTitle, mPostTitle, mPostContent, mUserName);
                     }
 
                     call.enqueue(new Callback<ResponseBody>() {
