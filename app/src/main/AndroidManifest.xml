@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.esung.biblotechandroid">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Activities.SignUpActivity"
+            android:label="@string/sign_up"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.SignInActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.PageListActivity"
+            android:label="@string/title_page_list"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.SearchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.PostDetailActivity"
+            android:label="@string/title_post_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Activities.PostListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.esung.biblotechandroid.Activities.PostListActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.PageDetailActivity"
+            android:label="@string/title_page_detail"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.PostListActivity"
+            android:label="@string/title_post_list"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.WritePostActivity"
+            android:label="@string/title_write_post"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:launchMode="singleTop">
+
+        </activity>
+        <activity android:name=".Activities.QRScanActivity" />
+        <activity android:name=".Activities.RentalActivity"></activity>
+    </application>
+
+</manifest>

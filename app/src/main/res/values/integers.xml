@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="rentedByMeButtonTag">1</integer>
+    <integer name="booksIreadButtonTag">2</integer>
+    <integer name="postIwroteButtonTag">3</integer>
+    <integer name="searchButtonTag">4</integer>
+    <integer name="scanQrCodeTag">5</integer>
+</resources>

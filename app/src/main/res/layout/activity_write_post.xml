@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.WritePostActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etv_postTitle"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:allowUndo="true"
+            android:hint="Type post Title here"
+            android:singleLine="false"
+            android:textSize="@dimen/sub_heading_font_size" />
+
+        <EditText
+            android:id="@+id/etv_postContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Type content here"
+            android:nestedScrollingEnabled="true" />
+
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@android:drawable/ic_menu_upload" />
+</FrameLayout>
